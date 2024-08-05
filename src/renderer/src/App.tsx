@@ -27,8 +27,8 @@ function App(): JSX.Element {
     <main className="h-[100vh] w-[100vw] position-relative flex flex-col justify-evenly items-center">
       <h1 className="text-5xl text-[var(--ev-c-text-6)] font-extrabold">{heading}</h1>
       <div className="flex gap-2 flex-col lg:flex-row">
-        {buttons.map(buttonContent =>
-          <Button className="bg-[var(--color-button)] rounded-2xl p-5" type="primary">
+        {buttons.map(( buttonContent, idx ) =>
+          <Button key={idx} className="bg-[var(--color-button)] rounded-2xl p-5" type="primary">
             {buttonContent.icon}
             {buttonContent.text}
           </Button>
