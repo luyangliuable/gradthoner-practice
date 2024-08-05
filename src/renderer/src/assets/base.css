@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --ev-c-white: #ffffff;
   --ev-c-white-soft: #f8f8f8;
@@ -14,6 +18,10 @@
   --ev-c-text-1: rgba(255, 255, 245, 0.86);
   --ev-c-text-2: rgba(235, 235, 245, 0.6);
   --ev-c-text-3: rgba(235, 235, 245, 0.38);
+  --ev-c-text-5: rgba(0, 0, 0, 0.86);
+  --ev-c-text-6: #004C4C;
+
+  --ev-c-teal: #66B2B2;
 
   --ev-button-alt-border: transparent;
   --ev-button-alt-text: var(--ev-c-text-1);
@@ -25,10 +33,14 @@
 
 :root {
   --color-background: var(--ev-c-black);
+  --color-background: var(--ev-c-white);
   --color-background-soft: var(--ev-c-black-soft);
   --color-background-mute: var(--ev-c-black-mute);
 
   --color-text: var(--ev-c-text-1);
+  --color-text: var(--ev-c-text-5);
+
+  --color-button: var(--ev-c-teal);
 }
 
 *,
