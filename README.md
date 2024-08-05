@@ -32,3 +32,12 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+
+### Error and Workarounds
+
+#### `RequestError: Self-signed certificate in certificate chain`
+
+* Workaround
+```sh
+export NODE_TLS_REJECT_UNAUTHORIZED=0
+```
