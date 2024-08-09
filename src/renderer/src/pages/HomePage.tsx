@@ -6,9 +6,7 @@ import {
 } from "@ant-design/icons";
 import { ReactNode } from "react";
 import { Button, Flex } from "antd";
-import { HashRouter, Link, Route, Routes, useNavigate } from "react-router-dom";
-import BlankPage from "./BlankPage";
-import AnotherBlankPage from "./AnotherBlankPage";
+import { useNavigate } from "react-router-dom";
 
 function HomePage(): JSX.Element {
   const buttons: { text: string; path: string; icon: ReactNode }[] = [
@@ -18,8 +16,8 @@ function HomePage(): JSX.Element {
       icon: <GithubOutlined />,
     },
     {
-      text: "List Repositories",
-      path: "/blank-page",
+      text: "List Team Repositories",
+      path: "/list-team-repos",
       icon: <UnorderedListOutlined />,
     },
     {
@@ -28,8 +26,8 @@ function HomePage(): JSX.Element {
       icon: <FileAddOutlined />,
     },
     {
-      text: "Add Team",
-      path: "/another-blank-page",
+      text: "Add Team to Repositories",
+      path: "/add-team-to-repos",
       icon: <TeamOutlined />,
     },
   ];

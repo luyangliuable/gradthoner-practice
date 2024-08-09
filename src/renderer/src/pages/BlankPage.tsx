@@ -1,10 +1,9 @@
-import GoBackButton from "@renderer/components/GoBackButton";
+import BackButton from "@renderer/components/BackButton";
 import React from "react";
 
 function BlankPage(): JSX.Element {
   return (
     <>
-      <GoBackButton />
       <div>BlankPage</div>
     </>
   );
