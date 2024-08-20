@@ -3,7 +3,7 @@ name: Setup Node.js environment
 on: push
   # Trigger the workflow on push or pull request,
   # but only for the main branch
-  
+
   # Replace pull_request with pull_request_target if you
   # plan to use this action with forks, see the Limitations section
 
@@ -22,10 +22,14 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v4
 
-      # Install your linters here
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21'  # Set the Node.js version
 
       - name: Run linters
         uses: actions/setup-node@v4.0.3
-      - run: npm install lint
-      - run: npm run lint 
-
+      - run: |
+        rm package-lock.json
+        npm install
+        npm run lint
