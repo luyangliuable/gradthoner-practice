@@ -54,7 +54,10 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on("ping", () => console.log("pong"));
   ipcMain.handle("system/loadReposFromTxt", loadReposFromTxt);
-  ipcMain.handle("system/selectFilesUnderDirectories", selectFilesUnderDirectories);
+  ipcMain.handle(
+    "system/selectFilesUnderDirectories",
+    selectFilesUnderDirectories,
+  );
 
   createWindow();
 

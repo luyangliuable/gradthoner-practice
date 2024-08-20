@@ -12,7 +12,7 @@ export function selectFilesUnderDirectories(): CommitFile[] {
     properties: ["openDirectory", "multiSelections"],
   });
   if (data === undefined) return [];
-  for (var i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     console.log("Selected directory: " + data[i]);
   }
   // TODO: Recursively get all file paths under the selected directories.
