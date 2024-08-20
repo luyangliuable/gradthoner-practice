@@ -29,6 +29,6 @@ jobs:
 
       - name: Run linters
         run: |
-        rm package-lock.json
-        npm install
-        npm run lint
+          rm package-lock.json
+          npm install
+          npm run lint
