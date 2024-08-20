@@ -1,7 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron";
+import { app, shell, BrowserWindow, ipcMain, safeStorage } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
+import Store from "electron-store";
 
 function createWindow(): void {
   // Create the browser window.
@@ -49,8 +50,58 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
+  const encryptStoreSet = (key: string, value: string): void => {
+    if (!safeStorage.isEncryptionAvailable()) {
+      console.error("Encryption is not avalaible");
+    }
+
+    const encryptedValue: Buffer = safeStorage.encryptString(value);
+    const encryptedValueHex = encryptedValue.toString("hex");
+    store.set(key, encryptedValueHex);
+  }
+
+  const encryptStoreGet = (key: string): string => {
+    if (!safeStorage.isEncryptionAvailable()) {
+      console.error("Encryption is not avalaible");
+    }
+
+    const encryptedValue: string = store.get(key) as string;
+    const encryptedValueBuffer: Buffer = Buffer.from(encryptedValue, "hex");
+    return safeStorage.decryptString(encryptedValueBuffer);
+  }
+
+  const getAll = () => {
+    console.log(store.store);
+  }
+
+  const store = new Store();
+
   // IPC test
   ipcMain.on("ping", () => console.log("pong"));
+
+  ipcMain.handle("addToken", async (_event, { key, value }) => {
+    encryptStoreSet(key, value)
+    return true;
+  });
+
+  if (process.env.TEST) {
+    getAll();
+    const testStoreKey = "testKey";
+    store.set(testStoreKey, "testVal");
+    const encryptionAvalaible = safeStorage.isEncryptionAvailable();
+    console.log(`Encryption Avalaible: ${encryptionAvalaible}`);
+    console.log(`Test electron store: ${store.get(testStoreKey)}`);
+    if (encryptionAvalaible) {
+      const encryptedString = safeStorage.encryptString("test");
+      const decryptedString = safeStorage.decryptString(encryptedString);
+      console.log(`Encryption test: ${encryptedString}`);
+      console.log(`Decryption test: ${decryptedString}`);
+
+      encryptStoreSet(testStoreKey, "testVal");
+
+      console.log(`Store get test: ${encryptStoreGet(testStoreKey)}`);
+    }
+  }
 
   createWindow();
 
