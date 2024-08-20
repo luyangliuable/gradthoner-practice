@@ -70,6 +70,17 @@ app.whenReady().then(() => {
     return safeStorage.decryptString(encryptedValueBuffer);
   }
 
+  const encryptStoreGetAllKeys = (): string[] => {
+    return Object.keys(store.store)
+  }
+
+  const encryptStoreGetAll = (): Record<string, string> => {
+    return Object.keys(store.store).reduce((acc, key: string) => {
+      acc[key] = encryptStoreGet(key);
+      return acc;
+    }, {})
+  }
+
   const getAll = () => {
     console.log(store.store);
     console.log(Object.keys(store.store));
@@ -79,6 +90,14 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on("ping", () => console.log("pong"));
+
+  ipcMain.handle("encryptStoreGetAll", async () => {
+    return encryptStoreGetAll();
+  });
+
+  ipcMain.handle("encryptStoreGetAllKeys", async () => {
+    return encryptStoreGetAllKeys();
+  });
 
   ipcMain.handle("addToken", async (_event, { key, value }) => {
     encryptStoreSet(key, value);
