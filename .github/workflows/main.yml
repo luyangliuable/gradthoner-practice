@@ -28,7 +28,7 @@ jobs:
           node-version: '21'  # Set the Node.js version
 
       - name: Run linters
-      - run: |
+        run: |
         rm package-lock.json
         npm install
         npm run lint
