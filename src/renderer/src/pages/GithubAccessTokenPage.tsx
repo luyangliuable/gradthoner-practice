@@ -1,4 +1,3 @@
-import BackButton from "@renderer/components/BackButton";
 import { Button, Input, List } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { RefObject, useEffect, useRef, useState } from "react";
@@ -17,7 +16,7 @@ type IToken = {
   key: string
 }
 
-function BlankPage(): JSX.Element {
+function GithubAccessTokenPage(): JSX.Element {
   const heading = "Github Access Token" as const;
 
   const keyInputRef: RefObject<any> = useRef(null);
@@ -26,10 +25,10 @@ function BlankPage(): JSX.Element {
 
   type NotificationPlacement = NotificationArgsProps['placement'];
 
-  const openNotification = (placement: NotificationPlacement) => {
+  const openNotification = (placement: NotificationPlacement, heading: string, message: string) => {
     api.info({
-      message: `Notification ${placement}`,
-      description: <Context.Consumer>{({ name }) => `Hello, ${name}!`}</Context.Consumer>,
+      message: heading,
+      description: <Context.Consumer>{() => message}</Context.Consumer>,
       placement,
     });
   };
@@ -44,23 +43,22 @@ function BlankPage(): JSX.Element {
   }
 
   useEffect(() => {
-    openNotification("topLeft");
     encryptStoreGetAll();
   }, []);
 
   const saveToken = () => {
-    openNotification("topLeft");
-    openNotification("topLeft");
-    openNotification("topLeft");
-    openNotification("topLeft");
+    openNotification("bottomRight", "Token Saved", "The token has successfully been saved.");
     const { ipcRenderer } = window.electron;
-    ipcRenderer.invoke('addToken', { key: keyInputRef.current.input.value, value: valueInputRef.current.input.value }).then((result: string) => {
+    const { keyInputKey } = keyInputRef.current.input;
+    const { keyInputValue } = valueInputRef.current.input;
+    ipcRenderer.invoke('addToken', { key: keyInputKey, value: keyInputValue }).then((result: string) => {
       encryptStoreGetAll();
     })
   }
 
   return (
     <main className="flex flex-col gap-10 justify-start w-full h-50 mt-10">
+      {contextHolder}
       <div className="flex gap-2 flex-col">
         <Title level={2}>{heading}</Title>
         <Input type="text" ref={keyInputRef} placeholder="name" />
@@ -88,4 +86,4 @@ function BlankPage(): JSX.Element {
   );
 }
 
-export default BlankPage;
+export default GithubAccessTokenPage;
