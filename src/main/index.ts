@@ -72,6 +72,7 @@ app.whenReady().then(() => {
 
   const getAll = () => {
     console.log(store.store);
+    console.log(Object.keys(store.store));
   }
 
   const store = new Store();
@@ -80,11 +81,12 @@ app.whenReady().then(() => {
   ipcMain.on("ping", () => console.log("pong"));
 
   ipcMain.handle("addToken", async (_event, { key, value }) => {
-    encryptStoreSet(key, value)
+    encryptStoreSet(key, value);
+    getAll();
     return true;
   });
 
-  if (process.env.TEST) {
+  if (true || process.env.TEST) {
     getAll();
     const testStoreKey = "testKey";
     store.set(testStoreKey, "testVal");
@@ -96,9 +98,7 @@ app.whenReady().then(() => {
       const decryptedString = safeStorage.decryptString(encryptedString);
       console.log(`Encryption test: ${encryptedString}`);
       console.log(`Decryption test: ${decryptedString}`);
-
       encryptStoreSet(testStoreKey, "testVal");
-
       console.log(`Store get test: ${encryptStoreGet(testStoreKey)}`);
     }
   }

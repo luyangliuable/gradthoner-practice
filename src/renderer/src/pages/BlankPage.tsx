@@ -41,14 +41,14 @@ function BlankPage(): JSX.Element {
     <main className="flex flex-col gap-10 justify-start w-full h-50 mt-10">
       <div className="flex gap-2 flex-col lg:flex-row">
         <Title level={2}>{heading}</Title>
-        <input type="text" ref={keyInputRef} placeholder="name" />
-        <input type="text" ref={valueInputRef} placeholder="token"/ >
+        <Input type="text" ref={keyInputRef} placeholder="name" />
+        <Input type="text" ref={valueInputRef} placeholder="token" />
         <Button
           className="bg-[var(--color-button)] rounded-2xl p-5"
           type="primary"
           onClick={() => {
             const { ipcRenderer } = window.electron;
-            const a = ipcRenderer.invoke('addToken', { key: keyInputRef.current.value, value: valueInputRef.current.value }).then((result: string) => {
+            ipcRenderer.invoke('addToken', { key: keyInputRef.current.input.value, value: valueInputRef.current.input.value }).then((result: string) => {
               console.log(result);
             })
           }}
