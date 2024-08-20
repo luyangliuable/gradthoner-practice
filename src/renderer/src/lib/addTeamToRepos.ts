@@ -1,4 +1,4 @@
-import { Repo } from "@shared/item/data";
+import { Repo } from "@shared/repo/data";
 
 export async function addTeamToRepos(
   org: string,

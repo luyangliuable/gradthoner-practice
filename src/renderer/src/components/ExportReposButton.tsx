@@ -1,5 +1,5 @@
 import { ExportOutlined } from "@ant-design/icons";
-import { Repo } from "@shared/item/data";
+import { Repo } from "@shared/repo/data";
 import { Button } from "antd";
 
 export interface Props {

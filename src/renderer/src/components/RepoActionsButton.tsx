@@ -1,5 +1,5 @@
 import { DownOutlined } from "@ant-design/icons";
-import { Repo } from "@shared/item/data";
+import { Repo } from "@shared/repo/data";
 import { Button, Dropdown, MenuProps } from "antd";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { useNavigate } from "react-router-dom";
