@@ -83,6 +83,10 @@ app.whenReady().then(() => {
     }, {})
   }
 
+  const encryptStoreDelete = (key: string): void => {
+    store.delete(key);
+  }
+
   const getAll = () => {
     console.log(store.store);
     console.log(Object.keys(store.store));
@@ -98,6 +102,10 @@ app.whenReady().then(() => {
     selectFilesUnderDirectories,
   );
 
+  ipcMain.handle("encryptStoreDelete", async (_event, key) => {
+    return encryptStoreDelete(key);
+  });
+
   ipcMain.handle("encryptStoreGetAll", async () => {
     return encryptStoreGetAll();
   });
@@ -106,7 +114,18 @@ app.whenReady().then(() => {
     return encryptStoreGetAllKeys();
   });
 
-  ipcMain.handle("addToken", async (_event, { key, value }) => {
+  const githubCloudKey = "githubCloud";
+  const githubEnterpriseServerKey = "githubEnterpriseServer";
+
+  if (!(githubCloudKey in store.store)) {
+    encryptStoreSet(githubCloudKey, "");
+  }
+
+  if (!(githubEnterpriseServerKey in store.store)) {
+    encryptStoreSet(githubEnterpriseServerKey, "");
+  }
+
+  ipcMain.handle("encryptStoreSet", async (_event, { key, value }) => {
     encryptStoreSet(key, value);
     getAll();
     return true;
@@ -122,10 +141,7 @@ app.whenReady().then(() => {
     if (encryptionAvalaible) {
       const encryptedString = safeStorage.encryptString("test");
       const decryptedString = safeStorage.decryptString(encryptedString);
-      console.log(`Encryption test: ${encryptedString}`);
-      console.log(`Decryption test: ${decryptedString}`);
       encryptStoreSet(testStoreKey, "testVal");
-      console.log(`Store get test: ${encryptStoreGet(testStoreKey)}`);
     }
   }
 
