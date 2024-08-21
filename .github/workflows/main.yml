@@ -16,8 +16,7 @@ permissions:
 jobs:
   run-linters:
     name: Run linters
-    runs-on: 
-      group: default
+    runs-on: default
     steps:
 
       - name: Run linters
