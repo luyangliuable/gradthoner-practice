@@ -1,4 +1,4 @@
-import { Button, Input, List, Empty, Popconfirm } from "antd";
+import { Button, Input, List, Empty, Popconfirm, Switch } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { createRef, RefObject, useEffect, useRef, useState } from "react";
 import classNames from 'classnames';
@@ -23,7 +23,13 @@ function GithubAccessTokenPage(): JSX.Element {
   const [api, contextHolder] = notification.useNotification();
   const { invoke } = window.electron.ipcRenderer;
 
+  const [useConfig, setUseConfig] = useState<boolean>(
+    globalThis.useConfig,
+  );
+
   type NotificationPlacement = NotificationArgsProps['placement'];
+
+  const { encryptStoreGetAll, encryptStoreDelete, encryptStoreSet } = window.api;
 
   const openNotification = (placement: NotificationPlacement, heading: string, message: string) => {
     api.info({
@@ -46,8 +52,8 @@ function GithubAccessTokenPage(): JSX.Element {
   const [tokenEditableList, setTokenEditableList] = useState<boolean[]>([]);
   const [tokenValueRefList, setTokenValueRefList] = useState<RefObject<HTMLSpanElement>[]>([]);
 
-  const encryptStoreGetAll = () => {
-    invoke('encryptStoreGetAll').then((res: Record<string, string>) => {
+  const getAll = () => {
+    encryptStoreGetAll().then((res: Record<string, string>) => {
       setTokenKeys(res);
       setTokenBlurredList(Object.keys(res).map(_ => true));
       setTokenEditableList(Object.keys(res).map(_ => false));
@@ -55,21 +61,24 @@ function GithubAccessTokenPage(): JSX.Element {
     });
   }
 
-  const encryptStoreDelete = (key: string) => {
-    invoke('encryptStoreDelete', key).then((res) => {
-      encryptStoreGetAll();
+  const deleteOne = (key: string) => {
+    encryptStoreDelete(key).then(() => {
+      getAll();
     });
   }
 
   useEffect(() => {
-    encryptStoreGetAll();
+    globalThis.useConfig = useConfig;
+  }, [useConfig]);
+
+  useEffect(() => {
+    getAll();
   }, []);
 
   const saveOneToken = (key: string, value: string) => {
-    const args = { key: key, value: value };
-    invoke('encryptStoreSet', args).then(() => {
-      encryptStoreGetAll();
-      openNotification("bottomRight", "Token Saved", "The token has successfully been saved.");
+    encryptStoreSet(key, value).then(() => {
+      getAll();
+      openNotification("bottomLeft", "Token Saved", "The token has successfully been saved.");
     })
   }
 
@@ -100,10 +109,21 @@ function GithubAccessTokenPage(): JSX.Element {
   return (
     <main className="flex flex-col gap-10 justify-start w-full h-50 mt-10">
       {contextHolder}
-      <div className="flex gap-2 flex-col">
+      <div className="flex gap-4 flex-col">
         <Title level={2}>{heading}</Title>
-        <Input type="text" ref={keyInputRef} placeholder="name" />
-        <Input type="text" ref={valueInputRef} placeholder="token" />
+        <div className="flex gap-2">
+          <span>Use Configuration for Token</span>
+          <Switch
+            defaultChecked={useConfig}
+            size="small"
+            onChange={(toggle) => setUseConfig(toggle)}
+            className="self-center"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Input type="text" ref={keyInputRef} placeholder="name" />
+          <Input type="text" ref={valueInputRef} placeholder="token" />
+        </div>
         <Button
           className="bg-[var(--color-button)] rounded-2xl p-5"
           type="primary"
@@ -119,22 +139,26 @@ function GithubAccessTokenPage(): JSX.Element {
                 <div className="flex flex-row w-full justify-between">
                   <span className="flex flex-row items-center" contentEditable={true}>{item}</span>
                   <div className="flex flex-row items-center gap-2">
-                    <span
-                      contentEditable={tokenEditableList[idx]}
-                      ref={tokenValueRefList[idx]}
-                      className={
-                        classNames("transition-[filter] duration-[0.1s] ease-[ease-in-out]", {
-                          "blur-md": tokenBlurredList[idx] && !tokenEditableList[idx]
-                        })
-                      }>
-                      {tokenBlurredList[idx] && !tokenEditableList[idx] ? "asdasdasdsadsad" : tokenKeys[item]}
-                    </span>
+                    {tokenKeys[item].length === 0 && !tokenEditableList[idx] ?
+                      "Empty" :
+                      <span
+                        contentEditable={tokenEditableList[idx]}
+                        ref={tokenValueRefList[idx]}
+                        className={
+                          classNames("p-1 transition-[filter border] min-w-[100px] duration-[0.1s] ease-[ease-in-out]", {
+                            "blur-md": tokenBlurredList[idx] && !tokenEditableList[idx],
+                            "border-[1px] border-solid border-[gray] rounded-md": tokenEditableList[idx]
+                          })
+                        }>
+                        {tokenBlurredList[idx] && !tokenEditableList[idx] ? "asdasdasdsadsad" : tokenKeys[item]}
+                      </span>
+                    }
                     <div className="flex flex-row items-center justify-end min-w-[80px] gap-2">
                       {item !== "githubCloud" && item !== "githubEnterpriseServer" &&
                         <Popconfirm
                           title="Delete the task"
                           description="Are you sure to delete this task?"
-                          onConfirm={() => encryptStoreDelete(item)}
+                          onConfirm={() => deleteOne(item)}
                           onCancel={cancel}
                           okText="Yes"
                           cancelText="No"

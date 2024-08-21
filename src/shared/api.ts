@@ -15,4 +15,7 @@ export interface IAPI {
    */
   selectFilesUnderDirectories: () => Promise<CommitFile[]>;
   loadCommitFiles: (filePaths: string) => Promise<CommitFile[]>;
+  encryptStoreGetAll: () => Promise<Record<string, string>>;
+  encryptStoreDelete: (key: string) => Promise<void>;
+  encryptStoreSet: (key: string, value: string) => Promise<void>;
 }

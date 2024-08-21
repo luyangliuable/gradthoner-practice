@@ -1,6 +1,6 @@
 import {
   FileAddOutlined,
-  GithubOutlined,
+  SettingOutlined,
   TeamOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
@@ -17,12 +17,8 @@ function HomePage(): JSX.Element {
     globalThis.useEnterpriseServer = useEnterpriseServer;
   }, [useEnterpriseServer]);
 
+
   const buttons: { text: string; path: string; icon: ReactNode }[] = [
-    {
-      text: "Github Access Token",
-      path: "/blank-page",
-      icon: <GithubOutlined />,
-    },
     {
       text: "List Team Repositories",
       path: "/list-team-repos",
@@ -37,6 +33,11 @@ function HomePage(): JSX.Element {
       text: "Add Team to Repositories",
       path: "/add-team-to-repos",
       icon: <TeamOutlined />,
+    },
+    {
+      text: "Setting",
+      path: "/blank-page",
+      icon: <SettingOutlined />,
     },
   ];
 

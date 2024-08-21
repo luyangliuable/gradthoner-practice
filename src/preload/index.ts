@@ -5,16 +5,28 @@ import { IAPI } from "@shared/api";
 import { CommitFile } from "@shared/commit/data";
 
 // Custom APIs for renderer
+const { invoke } = ipcRenderer;
+
 const api: IAPI = {
-  loadReposFromTxt: (): Promise<Repo[]> => {
-    return ipcRenderer.invoke("system/loadReposFromTxt");
+  loadReposFromTxt: async (): Promise<Repo[]> => {
+    return invoke("system/loadReposFromTxt");
   },
-  selectFilesUnderDirectories: (): Promise<CommitFile[]> => {
-    return ipcRenderer.invoke("system/selectFilesUnderDirectories");
+  selectFilesUnderDirectories: async (): Promise<CommitFile[]> => {
+    return invoke("system/selectFilesUnderDirectories");
   },
-  loadCommitFiles: (filePaths: string): Promise<CommitFile[]> => {
-    return ipcRenderer.invoke("system/loadCommitFiles", filePaths);
+  loadCommitFiles: async (filePaths: string): Promise<CommitFile[]> => {
+    return invoke("system/loadCommitFiles", filePaths);
   },
+  encryptStoreGetAll: async (): Promise<Record<string, string>> => {
+    return invoke("system/encryptStoreGetAll");
+  },
+  encryptStoreDelete: async (key: string): Promise<void> => {
+    return invoke("system/encryptStoreDelete", key);
+  },
+  encryptStoreSet: async (key: string, value: string): Promise<void> => {
+    const args = { key: key, value: value };
+    return invoke("system/encryptStoreSet", args);
+  }
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

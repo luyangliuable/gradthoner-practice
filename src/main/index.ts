@@ -5,6 +5,12 @@ import icon from "../../resources/icon.png?asset";
 import Store from "electron-store";
 import { loadReposFromTxt } from "./system/loadReposFromTxt";
 import { selectFilesUnderDirectories } from "./system/selectFilesUnderDirectories";
+import {
+  encryptStoreSet,
+  encryptStoreGetAllKeys,
+  encryptStoreGetAll,
+  encryptStoreDelete
+} from "./system/encryptStore";
 
 function createWindow(): void {
   // Create the browser window.
@@ -52,41 +58,6 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  const encryptStoreSet = (key: string, value: string): void => {
-    if (!safeStorage.isEncryptionAvailable()) {
-      console.error("Encryption is not avalaible");
-    }
-
-    const encryptedValue: Buffer = safeStorage.encryptString(value);
-    const encryptedValueHex = encryptedValue.toString("hex");
-    store.set(key, encryptedValueHex);
-  }
-
-  const encryptStoreGet = (key: string): string => {
-    if (!safeStorage.isEncryptionAvailable()) {
-      console.error("Encryption is not avalaible");
-    }
-
-    const encryptedValue: string = store.get(key) as string;
-    const encryptedValueBuffer: Buffer = Buffer.from(encryptedValue, "hex");
-    return safeStorage.decryptString(encryptedValueBuffer);
-  }
-
-  const encryptStoreGetAllKeys = (): string[] => {
-    return Object.keys(store.store)
-  }
-
-  const encryptStoreGetAll = (): Record<string, string> => {
-    return Object.keys(store.store).reduce((acc, key: string) => {
-      acc[key] = encryptStoreGet(key);
-      return acc;
-    }, {})
-  }
-
-  const encryptStoreDelete = (key: string): void => {
-    store.delete(key);
-  }
-
   const getAll = () => {
     console.log(store.store);
     console.log(Object.keys(store.store));
@@ -102,15 +73,15 @@ app.whenReady().then(() => {
     selectFilesUnderDirectories,
   );
 
-  ipcMain.handle("encryptStoreDelete", async (_event, key) => {
+  ipcMain.handle("system/encryptStoreDelete", async (_event, key) => {
     return encryptStoreDelete(key);
   });
 
-  ipcMain.handle("encryptStoreGetAll", async () => {
+  ipcMain.handle("system/encryptStoreGetAll", async () => {
     return encryptStoreGetAll();
   });
 
-  ipcMain.handle("encryptStoreGetAllKeys", async () => {
+  ipcMain.handle("system/encryptStoreGetAllKeys", async () => {
     return encryptStoreGetAllKeys();
   });
 
@@ -125,13 +96,13 @@ app.whenReady().then(() => {
     encryptStoreSet(githubEnterpriseServerKey, "");
   }
 
-  ipcMain.handle("encryptStoreSet", async (_event, { key, value }) => {
+  ipcMain.handle("system/encryptStoreSet", async (_event, { key, value }) => {
     encryptStoreSet(key, value);
     getAll();
     return true;
   });
 
-  if (true || process.env.TEST) {
+  if (process.env.TEST) {
     getAll();
     const testStoreKey = "testKey";
     store.set(testStoreKey, "testVal");
