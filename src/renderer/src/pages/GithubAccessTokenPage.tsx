@@ -150,7 +150,7 @@ function GithubAccessTokenPage(): JSX.Element {
                             "border-[1px] border-solid border-[gray] rounded-md": tokenEditableList[idx]
                           })
                         }>
-                        {tokenBlurredList[idx] && !tokenEditableList[idx] ? "asdasdasdsadsad" : tokenKeys[item]}
+                        {tokenBlurredList[idx] && !tokenEditableList[idx] ? "!@90wqdqwe" : tokenKeys[item]}
                       </span>
                     }
                     <div className="flex flex-row items-center justify-end min-w-[80px] gap-2">
