@@ -15,6 +15,9 @@ const api: IAPI = {
   loadCommitFiles: (filePaths: string): Promise<CommitFile[]> => {
     return ipcRenderer.invoke("system/loadCommitFiles", filePaths);
   },
+  loadFile: (filepath: string): Promise<string> => {
+    return ipcRenderer.invoke("system/loadFile", filepath);
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
