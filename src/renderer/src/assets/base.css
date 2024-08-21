@@ -1,4 +1,4 @@
-@layer tailwind-base, antd;
+@layer tckailwind-base, antd;
 @layer tailwind-base {
   @tailwind base;
 }
@@ -35,7 +35,11 @@
 }
 
 :root {
-  --color-background: var(--ev-c-black);
+  --color-background-dark: #333552;
+  --color-background-dark2: #333362;
+  --color-background-dark3: #335392;
+  --color-background-dark4: #2f2b3a;
+  --color-background-dark5: #46424f;
   --color-background: var(--ev-c-white);
   --color-background-soft: var(--ev-c-black-soft);
   --color-background-mute: var(--ev-c-black-mute);
@@ -79,4 +83,19 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  div, h1, h2, h3, span, label, * {
+    color: white !important;
+  }
+
+  button {
+    background: var(--color-background-dark3) !important;
+  }
+
+  table, thead, tr, th, td {
+    background: var(--color-background-dark4) !important;
+    border-color: var(--color-background-dark5) !important;
+  }
 }

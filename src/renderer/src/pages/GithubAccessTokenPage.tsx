@@ -14,6 +14,7 @@ import type { NotificationArgsProps } from 'antd';
 import { notification } from 'antd';
 import Context from "@renderer/store/context";
 import _default from "vite-tsconfig-paths";
+import "./GithubAccessTokenPage.css";
 
 function GithubAccessTokenPage(): JSX.Element {
   const heading = "Github Access Token" as const;
@@ -110,7 +111,11 @@ function GithubAccessTokenPage(): JSX.Element {
     <main className="flex flex-col gap-10 justify-start w-full h-50 mt-10">
       {contextHolder}
       <div className="flex gap-4 flex-col">
-        <Title level={2}>{heading}</Title>
+        <Title level={2}>
+          <div className="dark:text-white">
+          {heading}
+          </div>
+        </Title>
         <div className="flex gap-2">
           <span>Use Configuration for Token</span>
           <Switch

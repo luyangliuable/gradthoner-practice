@@ -54,7 +54,7 @@ function HomePage(): JSX.Element {
   };
 
   return (
-    <main>
+    <main className="dark:bg-[var(--color-background-dark)]">
       <Flex
         justify="end"
         gap={10}
