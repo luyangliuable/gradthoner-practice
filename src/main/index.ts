@@ -5,7 +5,8 @@ import icon from "../../resources/icon.png?asset";
 import Store from "electron-store";
 import { loadReposFromTxt } from "./system/loadReposFromTxt";
 import { selectFilesUnderDirectories } from "./system/selectFilesUnderDirectories";
-import { loadFile } from "./system/loadfile";
+import { loadFile } from "./system/loadFile";
+
 
 function createWindow(): void {
   // Create the browser window.
