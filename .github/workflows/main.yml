@@ -16,10 +16,12 @@ permissions:
 jobs:
   run-linters:
     name: Run linters
-    runs-on: default
+    runs-on: 
+      group: default
     steps:
 
       - name: Run linters
-        run: echo "run linter"
-
+        uses: actions/setup-node@v4.0.3
+      - run: npm install lint
+      - run: npm run lint 
 
