@@ -3,8 +3,7 @@ import { Button, Flex, Input, Modal, Select, Steps } from "antd";
 import Form from "antd/es/form/Form";
 import FormItem from "antd/es/form/FormItem";
 import { ImportOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { Repo } from "@shared/item/data";
-import { listTeamRepos } from "@renderer/lib/listTeamItems";
+import { Repo } from "@shared/repo/data";
 import RepoTable from "@renderer/components/RepoTable";
 import ImportReposButton from "@renderer/components/ImportReposButton";
 import { useLocation } from "react-router-dom";
@@ -32,6 +31,12 @@ function AddTeamToReposPage(): JSX.Element {
       onLoadedRepos(location.state.repos);
     }
   }, [location]);
+
+  const handleImportTxtBtnClick = async (): Promise<void> => {
+    console.log("Clicked import from txt.");
+    const repos: Repo[] = await window.api.loadReposFromTxt();
+    onLoadedRepos(repos);
+  };
 
   const onLoadedRepos = (repos: Repo[]): void => {
     setSelectedRowKeys([]);
@@ -88,7 +93,7 @@ function AddTeamToReposPage(): JSX.Element {
             repos={getSelectedRepos()}
             disabled={!hasSelected}
           />
-          <Button>
+          <Button onClick={handleImportTxtBtnClick}>
             Import txt
             <ImportOutlined />
           </Button>

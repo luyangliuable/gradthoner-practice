@@ -1,5 +1,5 @@
 export interface Repo {
-  key: React.Key;
+  key: number;
   owner: string;
   name: string;
   url: string;

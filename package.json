@@ -5,6 +5,7 @@
   "main": "./out/main/index.js",
   "author": "example.com",
   "homepage": "https://electron-vite.org",
+  "type": "module",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
@@ -28,6 +29,7 @@
     "electron-store": "^8.2.0",
     "install": "^0.13.0",
     "npm": "^10.8.2",
+    "octokit": "^4.0.2",
     "react-router-dom": "^6.25.1",
     "vite-tsconfig-paths": "^4.3.2"
   },

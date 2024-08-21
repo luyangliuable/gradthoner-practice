@@ -1,5 +1,5 @@
 import { Table, TableColumnsType, TableProps } from "antd";
-import { Repo } from "@shared/item/data";
+import { Repo } from "@shared/repo/data";
 import React from "react";
 
 export interface Props {

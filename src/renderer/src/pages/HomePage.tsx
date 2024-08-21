@@ -4,11 +4,19 @@ import {
   TeamOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
-import { ReactNode } from "react";
-import { Button, Flex } from "antd";
+import { ReactNode, useEffect, useState } from "react";
+import { Button, Flex, Switch } from "antd";
 import { useNavigate } from "react-router-dom";
 
 function HomePage(): JSX.Element {
+  const [useEnterpriseServer, setUseEnterpriseServer] = useState<boolean>(
+    globalThis.useEnterpriseServer,
+  );
+
+  useEffect(() => {
+    globalThis.useEnterpriseServer = useEnterpriseServer;
+  }, [useEnterpriseServer]);
+
   const buttons: { text: string; path: string; icon: ReactNode }[] = [
     {
       text: "Github Access Token",
@@ -32,6 +40,10 @@ function HomePage(): JSX.Element {
     },
   ];
 
+  const handleSwitchUseEnterpriseServer = (toggle: boolean): void => {
+    setUseEnterpriseServer(toggle);
+  };
+
   const heading = "Batch Git Repo Tool" as const;
   const navigate = useNavigate();
 
@@ -41,42 +53,61 @@ function HomePage(): JSX.Element {
   };
 
   return (
-    <main className="h-[100vh] w-[100vw] position-relative flex flex-col justify-evenly items-center">
-      <h1 className="text-5xl text-[var(--ev-c-text-6)] font-extrabold">
-        {heading}
-      </h1>
-      <div className="flex gap-2 flex-col lg:flex-row">
-        {buttons.map((buttonContent, idx) => (
-          <Button
-            key={idx}
-            className="bg-[var(--color-button)] rounded-2xl p-5"
-            type="primary"
-            onClick={() => handlePageBtnClick(buttonContent.path)}
-          >
-            {buttonContent.icon}
-            {buttonContent.text}
-          </Button>
-        ))}
-      </div>
+    <main>
       <Flex
-        className="w-[50%] text-gray-500 text-center"
-        gap="middle"
-        justify="center"
-        align="center"
-        vertical
+        justify="end"
+        gap={10}
+        className="stickytop-0 h-12 z-50 pt-3 pb-3 pl-5 pr-5"
       >
-        <span>
-          This tool aims to provide a graphical interface with ghe-tools.go and
-          the Github REST API to process multiple repositories in batch which
-          can be a time-consuming task.
-        </span>
-        <span>
-          For contribution and adding features to this app -{" "}
-          <a href="" target="_blank">
-            repository
-          </a>
-        </span>
+        {useEnterpriseServer ? (
+          <span>Using GitHub Enterprise Server</span>
+        ) : (
+          <span>Using GitHub Cloud</span>
+        )}
+        <Switch
+          defaultChecked={useEnterpriseServer}
+          size="small"
+          onChange={handleSwitchUseEnterpriseServer}
+          className="self-center"
+        />
       </Flex>
+      <div className="h-[100vh] w-[100vw] position-relative flex flex-col justify-evenly items-center">
+        <h1 className="text-5xl text-[var(--ev-c-text-6)] font-extrabold">
+          {heading}
+        </h1>
+        <div className="flex gap-2 flex-col lg:flex-row">
+          {buttons.map((buttonContent, idx) => (
+            <Button
+              key={idx}
+              className="bg-[var(--color-button)] rounded-2xl p-5"
+              type="primary"
+              onClick={() => handlePageBtnClick(buttonContent.path)}
+            >
+              {buttonContent.icon}
+              {buttonContent.text}
+            </Button>
+          ))}
+        </div>
+        <Flex
+          className="w-[50%] text-gray-500 text-center"
+          gap="middle"
+          justify="center"
+          align="center"
+          vertical
+        >
+          <span>
+            This tool aims to provide a graphical interface with ghe-tools.go
+            and the Github REST API to process multiple repositories in batch
+            which can be a time-consuming task.
+          </span>
+          <span>
+            For contribution and adding features to this app -{" "}
+            <a href="" target="_blank">
+              repository
+            </a>
+          </span>
+        </Flex>
+      </div>
     </main>
   );
 }

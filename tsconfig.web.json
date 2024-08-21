@@ -8,6 +8,8 @@
     "src/shared/**/*",
   ],
   "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
     "composite": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,

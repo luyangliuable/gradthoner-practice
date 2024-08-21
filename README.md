@@ -13,6 +13,17 @@ An Electron application with React and TypeScript
 ```bash
 $ npm install
 ```
+#### Environment Variables
+Add an `.env` file at project root.
+
+The file should contain the following env variables:
+```bash
+# Your PAT for development usage with GitHub Enterprise Cloud (GHEC) REST API.
+RENDERER_VITE_GITHUB_TOKEN=MY_TOKEN
+
+# Your PAT for development usage with GitHub Enterprise Server (GHES) REST API.
+RENDERER_VITE_GITHUB_ENTERPRISE_SERVER_TOKEN=MY_TOKEN
+```
 
 ### Development
 
