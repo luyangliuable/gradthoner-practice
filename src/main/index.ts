@@ -8,6 +8,7 @@ import { selectFilesUnderDirectories } from "./system/selectFilesUnderDirectorie
 import { loadFile } from "./system/loadFile";
 
 
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -105,6 +106,7 @@ app.whenReady().then(() => {
   );
   ipcMain.handle("system/loadFile", (evt, filePath) => loadFile(evt, filePath));
 
+
   ipcMain.handle("encryptStoreDelete", async (_event, key) => {
     return encryptStoreDelete(key);
   });
@@ -147,6 +149,7 @@ app.whenReady().then(() => {
       encryptStoreSet(testStoreKey, "testVal");
     }
   }
+
 
   createWindow();
 
