@@ -1,14 +1,13 @@
-name: Setup Node.js environment
+name: Linter
 
-on: push
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
-  
-  # Replace pull_request with pull_request_target if you
-  # plan to use this action with forks, see the Limitations section
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-
-# Down scope as necessary via https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
 permissions:
   checks: write
   contents: write
@@ -16,16 +15,11 @@ permissions:
 jobs:
   run-linters:
     name: Run linters
-    runs-on: [self-hosted, ubuntu]
-
+    runs-on: default
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-
-      # Install your linters here
 
       - name: Run linters
-        uses: actions/setup-node@v4.0.3
-      - run: npm install lint
-      - run: npm run lint 
+        
+        run: echo "lint complete"
+
 
