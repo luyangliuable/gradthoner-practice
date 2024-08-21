@@ -26,7 +26,10 @@ const api: IAPI = {
   encryptStoreSet: async (key: string, value: string): Promise<void> => {
     const args = { key: key, value: value };
     return invoke("system/encryptStoreSet", args);
-  }
+  },
+  loadFile: (filepath: string): Promise<string> => {
+    return ipcRenderer.invoke("system/loadFile", filepath);
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

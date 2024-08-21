@@ -1,4 +1,4 @@
-name: Linter
+name: Build
 
 on: 
   push:
@@ -14,12 +14,13 @@ permissions:
 
 jobs:
   run-linters:
-    name: Run linters
+    name: Build
     runs-on: default
     steps:
 
-      - name: Run linters
-        
-        run: echo "lint complete"
+      - name: Run build
+        run: echo "npm run build:win" 
+      - name: complete status
+        run: echo "Build complete"
 
 

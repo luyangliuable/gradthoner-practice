@@ -18,4 +18,5 @@ export interface IAPI {
   encryptStoreGetAll: () => Promise<Record<string, string>>;
   encryptStoreDelete: (key: string) => Promise<void>;
   encryptStoreSet: (key: string, value: string) => Promise<void>;
+  loadFile: (filePath: string) => Promise<string>;
 }

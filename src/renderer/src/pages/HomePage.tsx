@@ -26,7 +26,7 @@ function HomePage(): JSX.Element {
     },
     {
       text: "Add Files",
-      path: "/another-blank-page",
+      path: "/add-files",
       icon: <FileAddOutlined />,
     },
     {
