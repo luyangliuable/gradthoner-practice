@@ -1,20 +1,13 @@
 name: Linter
 
 on: 
-  push:
+  merge:
     branches:
       - main
   pull_request:
     branches:
       - main
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
-  
-  # Replace pull_request with pull_request_target if you
-  # plan to use this action with forks, see the Limitations section
 
-
-# Down scope as necessary via https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
 permissions:
   checks: write
   contents: write
