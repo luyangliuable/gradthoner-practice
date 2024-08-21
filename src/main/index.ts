@@ -1,7 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron";
+import { app, shell, BrowserWindow, ipcMain, safeStorage } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
+import Store from "electron-store";
 import { loadReposFromTxt } from "./system/loadReposFromTxt";
 import { selectFilesUnderDirectories } from "./system/selectFilesUnderDirectories";
 import { loadFile } from "./system/loadfile";
@@ -52,6 +53,48 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
+  const encryptStoreSet = (key: string, value: string): void => {
+    if (!safeStorage.isEncryptionAvailable()) {
+      console.error("Encryption is not avalaible");
+    }
+
+    const encryptedValue: Buffer = safeStorage.encryptString(value);
+    const encryptedValueHex = encryptedValue.toString("hex");
+    store.set(key, encryptedValueHex);
+  }
+
+  const encryptStoreGet = (key: string): string => {
+    if (!safeStorage.isEncryptionAvailable()) {
+      console.error("Encryption is not avalaible");
+    }
+
+    const encryptedValue: string = store.get(key) as string;
+    const encryptedValueBuffer: Buffer = Buffer.from(encryptedValue, "hex");
+    return safeStorage.decryptString(encryptedValueBuffer);
+  }
+
+  const encryptStoreGetAllKeys = (): string[] => {
+    return Object.keys(store.store)
+  }
+
+  const encryptStoreGetAll = (): Record<string, string> => {
+    return Object.keys(store.store).reduce((acc, key: string) => {
+      acc[key] = encryptStoreGet(key);
+      return acc;
+    }, {})
+  }
+
+  const encryptStoreDelete = (key: string): void => {
+    store.delete(key);
+  }
+
+  const getAll = () => {
+    console.log(store.store);
+    console.log(Object.keys(store.store));
+  }
+
+  const store = new Store();
+
   // IPC test
   ipcMain.on("ping", () => console.log("pong"));
   ipcMain.handle("system/loadReposFromTxt", loadReposFromTxt);
@@ -60,6 +103,49 @@ app.whenReady().then(() => {
     selectFilesUnderDirectories,
   );
   ipcMain.handle("system/loadFile", (evt, filePath) => loadFile(evt, filePath));
+
+  ipcMain.handle("encryptStoreDelete", async (_event, key) => {
+    return encryptStoreDelete(key);
+  });
+
+  ipcMain.handle("encryptStoreGetAll", async () => {
+    return encryptStoreGetAll();
+  });
+
+  ipcMain.handle("encryptStoreGetAllKeys", async () => {
+    return encryptStoreGetAllKeys();
+  });
+
+  const githubCloudKey = "githubCloud";
+  const githubEnterpriseServerKey = "githubEnterpriseServer";
+
+  if (!(githubCloudKey in store.store)) {
+    encryptStoreSet(githubCloudKey, "");
+  }
+
+  if (!(githubEnterpriseServerKey in store.store)) {
+    encryptStoreSet(githubEnterpriseServerKey, "");
+  }
+
+  ipcMain.handle("encryptStoreSet", async (_event, { key, value }) => {
+    encryptStoreSet(key, value);
+    getAll();
+    return true;
+  });
+
+  if (true || process.env.TEST) {
+    getAll();
+    const testStoreKey = "testKey";
+    store.set(testStoreKey, "testVal");
+    const encryptionAvalaible = safeStorage.isEncryptionAvailable();
+    console.log(`Encryption Avalaible: ${encryptionAvalaible}`);
+    console.log(`Test electron store: ${store.get(testStoreKey)}`);
+    if (encryptionAvalaible) {
+      const encryptedString = safeStorage.encryptString("test");
+      const decryptedString = safeStorage.decryptString(encryptedString);
+      encryptStoreSet(testStoreKey, "testVal");
+    }
+  }
 
   createWindow();
 

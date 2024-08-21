@@ -26,6 +26,7 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "antd": "^5.19.3",
+    "classnames": "^2.5.1",
     "electron-store": "^8.2.0",
     "install": "^0.13.0",
     "npm": "^10.8.2",
