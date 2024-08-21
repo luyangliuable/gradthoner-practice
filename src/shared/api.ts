@@ -15,4 +15,5 @@ export interface IAPI {
    */
   selectFilesUnderDirectories: () => Promise<CommitFile[]>;
   loadCommitFiles: (filePaths: string) => Promise<CommitFile[]>;
+  loadFile: (filePath: string) => Promise<string>;
 }
